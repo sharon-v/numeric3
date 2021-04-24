@@ -216,7 +216,7 @@ def dominantDiagonal(a):
     return True
 
 
-def guessJ(G, H, b):
+def guess(G, H, b):
     epsilon = 0.00001
     iteration = 0
     prevX = makeMatrics(len(b), len(b[0]))
@@ -235,6 +235,7 @@ def multScalar(a, s):
     for i in range(len(a)):
         for j in range(len(a[i])):
             a[i][j] *= s
+    return a
 
 
 def plusMatrix(a, b):
@@ -253,13 +254,12 @@ def minusMatrix(a, b):
     return minusM
 
 
-def gaussSeidel():
-    pass
+def gaussSeidel(a, b):
+    guess(GHgauss(a), b)
 
 
-def jacobi():
-    pass
-
+def jacobi(a, b):
+    guess(GHjacobi(a), b)
 
 def driver():
     """
