@@ -255,16 +255,33 @@ def minusMatrix(a, b):
 
 
 def gaussSeidel(a, b):
-    guess(GHgauss(a), b)
+    G, H = GHgauss(a)
+    guess(G, H, b)
 
 
 def jacobi(a, b):
-    guess(GHjacobi(a), b)
+    G, H = GHjacobi(a)
+    guess(G, H, b)
+
 
 def driver():
     """
     main function
     :return: prints results
     """
-    a = []
-    b = []
+    a = [[4, 2, 0],
+         [2, 10, 4],
+         [0, 4, 5]]
+
+    b = [[2],
+         [6],
+         [5]]
+
+    if dominantDiagonal(a) is False:
+        print("The system can't converge")
+        return
+    jacobi(a, b)
+    gaussSeidel(a, b)
+
+
+driver()
