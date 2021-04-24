@@ -201,7 +201,7 @@ def GHgauss(a):
     L, D, U = LDU(a)
     invLminusD = inverse(minusMatrix(L, D))
     invLplusD = inverse(plusMatrix(L, D))
-    G = multScalar(invLminusD, -1)
+    G = multScalar(multMatrics(invLminusD, U), -1)
     return G, invLplusD
 
 
@@ -220,15 +220,15 @@ def guess(G, H, b):
     epsilon = 0.00001
     iteration = 0
     prevX = makeMatrics(len(b), len(b[0]))
-    currentX = unitMatrics(makeMatrics(len(b), len(b[0])))
-    while abs(currentX[0] - prevX[0]) > epsilon:
-        for i in range(len(prevX)):
-            prevX[i] = plusMatrix(multMatrics(G, prevX[i]), H)
-            print(prevX[i], end="   ")
-        iteration += 1
+    currentX = makeMatrics(len(b), len(b[0]))
+    flag = True
+    while abs(currentX[0][0] - prevX[0][0]) > epsilon or flag is True:
+        flag = False
+        print(prevX)
         currentX = prevX
-        print("")
-    print("Total iterations: " + iteration)
+        prevX = plusMatrix(multMatrics(G, prevX), multMatrics(H, b))
+        iteration += 1
+    print("Total iterations: " + str(iteration) + "\n")
 
 
 def multScalar(a, s):
@@ -239,18 +239,18 @@ def multScalar(a, s):
 
 
 def plusMatrix(a, b):
-    plusM = unitMatrics(makeMatrics(len(a), len(a[0])))
+    plusM = makeMatrics(len(a), len(a[0]))
     for i in range(len(a)):
-        for j in range(len(a[i])):
-            a[i][j] += b[i][j]
+        for j in range(len(a[0])):
+            plusM[i][j] = a[i][j] + b[i][j]
     return plusM
 
 
 def minusMatrix(a, b):
-    minusM = unitMatrics(makeMatrics(len(a), len(a[0])))
+    minusM = makeMatrics(len(a), len(a[0]))
     for i in range(len(a)):
-        for j in range(len(a[i])):
-            a[i][j] -= b[i][j]
+        for j in range(len(a[0])):
+            minusM[i][j] = a[i][j] - b[i][j]
     return minusM
 
 
