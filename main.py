@@ -205,27 +205,6 @@ def GHgauss(a):
     return G, invLplusD
 
 
-def gaussSeidel():
-    pass
-
-
-def jacobi():
-    pass
-
-
-def driver():
-    """
-    main function
-    :return: prints results
-    """
-    a = []
-    b = []
-
-
-
-
-
-
 def dominantDiagonal(a):
     sum1 = 0
     for i in range(len(a)):
@@ -242,7 +221,7 @@ def guessJ(G, H, b):
     iteration = 0
     prevX = makeMatrics(len(b), len(b[0]))
     currentX = unitMatrics(makeMatrics(len(b), len(b[0])))
-    while abs(currentX[0]-prevX[0]) > epsilon:
+    while abs(currentX[0] - prevX[0]) > epsilon:
         for i in range(len(prevX)):
             prevX[i] = plusMatrix(multMatrics(G, prevX[i]), H)
             print(prevX[i], end="   ")
@@ -250,7 +229,6 @@ def guessJ(G, H, b):
         currentX = prevX
         print("")
     print("Total iterations: " + iteration)
-
 
 
 def multScalar(a, s):
@@ -273,3 +251,20 @@ def minusMatrix(a, b):
         for j in range(len(a[i])):
             a[i][j] -= b[i][j]
     return minusM
+
+
+def gaussSeidel():
+    pass
+
+
+def jacobi():
+    pass
+
+
+def driver():
+    """
+    main function
+    :return: prints results
+    """
+    a = []
+    b = []
