@@ -175,8 +175,8 @@ def inverse(a):
 
 def LDU(a):
     """
-    :param a:
-    :return:
+    :param a: get a matrix
+    :return: L, U, D matrix
     """
     L = makeMatrics(len(a), len(a[0]))
     D = makeMatrics(len(a), len(a[0]))
@@ -194,8 +194,8 @@ def LDU(a):
 
 def GHjacobi(a):
     """
-    :param a:
-    :return:
+    :param a: get a matrix
+    :return: H, G matrix of jacobi
     """
     L, D, U = LDU(a)
     invD = inverse(D)
@@ -205,8 +205,8 @@ def GHjacobi(a):
 
 def GHgauss(a):
     """
-    :param a:
-    :return:
+    :param a: get a matrix
+    :return: H, G matrix of gauss
     """
     L, D, U = LDU(a)
     invLminusD = inverse(plusMatrix(L, D))
@@ -217,8 +217,8 @@ def GHgauss(a):
 
 def dominantDiagonal(a):
     """
-    :param a:
-    :return:
+    :param a: get a matrix
+    :return: true if the matrix have dominant diagonal, else false
     """
     sum1 = 0
     for i in range(len(a)):
@@ -232,10 +232,10 @@ def dominantDiagonal(a):
 
 def guess(G, H, b):
     """
-    :param G:
-    :param H:
-    :param b:
-    :return:
+    :param G: get G matrix
+    :param H: get H matrix
+    :param b: get result vector
+    :return: print iteration of calculus
     """
     epsilon = 0.00001
     iteration = 0
@@ -253,9 +253,9 @@ def guess(G, H, b):
 
 def multScalar(a, s):
     """
-    :param a:
-    :param s:
-    :return:
+    :param a: get a matrix
+    :param s: get scalar number
+    :return: new matrix of scalar mult a
     """
     for i in range(len(a)):
         for j in range(len(a[i])):
@@ -265,9 +265,9 @@ def multScalar(a, s):
 
 def plusMatrix(a, b):
     """
-    :param a:
-    :param b:
-    :return:
+    :param a: get a matrix
+    :param b: get b matrix
+    :return: new matrix of plus between a and b
     """
     plusM = makeMatrics(len(a), len(a[0]))
     for i in range(len(a)):
@@ -276,24 +276,11 @@ def plusMatrix(a, b):
     return plusM
 
 
-def minusMatrix(a, b):
-    """
-    :param a:
-    :param b:
-    :return:
-    """
-    minusM = makeMatrics(len(a), len(a[0]))
-    for i in range(len(a)):
-        for j in range(len(a[0])):
-            minusM[i][j] = a[i][j] - b[i][j]
-    return minusM
-
-
 def gaussSeidel(a, b):
     """
-    :param a:
-    :param b:
-    :return:
+    :param a: matrix a
+    :param b: result vector
+    :return: print the iteration of gauss seidel
     """
     G, H = GHgauss(a)
     guess(G, H, b)
@@ -301,9 +288,9 @@ def gaussSeidel(a, b):
 
 def jacobi(a, b):
     """
-    :param a:
-    :param b:
-    :return:
+    :param a: matrix a
+    :param b: result vector
+    :return: print the iteration of jacobi
     """
     G, H = GHjacobi(a)
     guess(G, H, b)
