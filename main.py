@@ -220,12 +220,12 @@ def dominantDiagonal(a):
     :param a: get a matrix
     :return: true if the matrix have dominant diagonal, else false
     """
-    sum1 = 0
     for i in range(len(a)):
-        for j in range(len(a[i])):
-            if i != j:
-                sum1 += a[i][j]
-        if abs(sum1) > a[i][i]:
+        sum1 = 0
+        for j in range(len(a[0])):
+            if i is not j:
+                sum1 += abs(a[i][j])
+        if sum1 > a[i][i]:
             return False
     return True
 
@@ -307,6 +307,7 @@ def gaussSeidel(a, b):
     :return: print the iteration of gauss seidel
     """
     G, H = GHgauss(a)
+    print("Gauss-Seidel = ")
     if checkConvergence(G) is False:
         print("The system can't converge")
         return
@@ -320,6 +321,7 @@ def jacobi(a, b):
     :return: print the iteration of jacobi
     """
     G, H = GHjacobi(a)
+    print("Jacobi = ")
     if checkConvergence(G) is False:
         print("The system can't converge")
         return
@@ -333,7 +335,7 @@ def driver():
     """
     a = [[4, 2, 0],
          [2, 10, 4],
-         [0, 4, 3]]
+         [0, 4, 5]]
 
     b = [[2],
          [6],
