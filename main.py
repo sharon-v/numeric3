@@ -199,7 +199,7 @@ def GHjacobi(a):
 
 def GHgauss(a):
     L, D, U = LDU(a)
-    invLminusD = inverse(minusMatrix(L, D))
+    invLminusD = inverse(plusMatrix(L, D))
     invLplusD = inverse(plusMatrix(L, D))
     G = multScalar(multMatrics(invLminusD, U), -1)
     return G, invLplusD
