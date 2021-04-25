@@ -54,10 +54,10 @@ def det(a):
 
 def minor(b, row, col):
     """
-    :param b: matrix
+    :param b: matrics
     :param row: row to remove
     :param col: column to remove
-    :return: matrix b without row and col
+    :return: matrics b without row and col
     """
     if row >= len(b) and col >= len(b):
         return b
@@ -276,6 +276,30 @@ def plusMatrix(a, b):
     return plusM
 
 
+def infNorm(a):
+    """
+    :param a: matrics
+    :return: infinity norm of matrics a
+    """
+    norm = 0
+    for i in range(len(a[0])):
+        sumRow = 0
+        for j in range(len(a)):
+            sumRow += abs(a[i][j])
+        norm = max(sumRow, norm)
+    return norm
+
+
+def checkConvergence(G):
+    """
+    :param G: a matrics
+    :return: true if convergence condition is met
+    """
+    if infNorm(G) < 1:
+        return True
+    return False
+
+
 def gaussSeidel(a, b):
     """
     :param a: matrix a
@@ -283,6 +307,9 @@ def gaussSeidel(a, b):
     :return: print the iteration of gauss seidel
     """
     G, H = GHgauss(a)
+    if checkConvergence(G) is False:
+        print("The system can't converge")
+        return
     guess(G, H, b)
 
 
@@ -293,6 +320,9 @@ def jacobi(a, b):
     :return: print the iteration of jacobi
     """
     G, H = GHjacobi(a)
+    if checkConvergence(G) is False:
+        print("The system can't converge")
+        return
     guess(G, H, b)
 
 
@@ -303,15 +333,14 @@ def driver():
     """
     a = [[4, 2, 0],
          [2, 10, 4],
-         [0, 4, 5]]
+         [0, 4, 3]]
 
     b = [[2],
          [6],
          [5]]
 
     if dominantDiagonal(a) is False:
-        print("The system can't converge")
-        return
+        print("Sufficient condition for convergence is not met")
     jacobi(a, b)
     gaussSeidel(a, b)
 
