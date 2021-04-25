@@ -116,7 +116,6 @@ def swapRow(a, r1, r2):
 def findU(a):
     """
     :param a: matrics
-    :param pivoting: indicates- 0 if not using pivoting, else if using pivoting
     :return: U and inverse L matrices
     """
     invL = unitMatrics(makeMatrics(len(a), len(a[0])))
@@ -158,7 +157,6 @@ def oneOnDiagonal(a, matInverse):
 def inverse(a):
     """
     :param a: matrics
-    :param pivoting: indicates- 0 if not using pivoting, else if using pivoting
     :return: inverse matrics a
     """
     if det(a) is 0:
@@ -176,6 +174,10 @@ def inverse(a):
 
 
 def LDU(a):
+    """
+    :param a:
+    :return:
+    """
     L = makeMatrics(len(a), len(a[0]))
     D = makeMatrics(len(a), len(a[0]))
     U = makeMatrics(len(a), len(a[0]))
@@ -191,6 +193,10 @@ def LDU(a):
 
 
 def GHjacobi(a):
+    """
+    :param a:
+    :return:
+    """
     L, D, U = LDU(a)
     invD = inverse(D)
     G = multScalar(multMatrics(invD, plusMatrix(L, U)), -1)
@@ -198,6 +204,10 @@ def GHjacobi(a):
 
 
 def GHgauss(a):
+    """
+    :param a:
+    :return:
+    """
     L, D, U = LDU(a)
     invLminusD = inverse(plusMatrix(L, D))
     invLplusD = inverse(plusMatrix(L, D))
@@ -206,6 +216,10 @@ def GHgauss(a):
 
 
 def dominantDiagonal(a):
+    """
+    :param a:
+    :return:
+    """
     sum1 = 0
     for i in range(len(a)):
         for j in range(len(a[i])):
@@ -217,6 +231,12 @@ def dominantDiagonal(a):
 
 
 def guess(G, H, b):
+    """
+    :param G:
+    :param H:
+    :param b:
+    :return:
+    """
     epsilon = 0.00001
     iteration = 0
     prevX = makeMatrics(len(b), len(b[0]))
@@ -232,6 +252,11 @@ def guess(G, H, b):
 
 
 def multScalar(a, s):
+    """
+    :param a:
+    :param s:
+    :return:
+    """
     for i in range(len(a)):
         for j in range(len(a[i])):
             a[i][j] *= s
@@ -239,6 +264,11 @@ def multScalar(a, s):
 
 
 def plusMatrix(a, b):
+    """
+    :param a:
+    :param b:
+    :return:
+    """
     plusM = makeMatrics(len(a), len(a[0]))
     for i in range(len(a)):
         for j in range(len(a[0])):
@@ -247,6 +277,11 @@ def plusMatrix(a, b):
 
 
 def minusMatrix(a, b):
+    """
+    :param a:
+    :param b:
+    :return:
+    """
     minusM = makeMatrics(len(a), len(a[0]))
     for i in range(len(a)):
         for j in range(len(a[0])):
@@ -255,11 +290,21 @@ def minusMatrix(a, b):
 
 
 def gaussSeidel(a, b):
+    """
+    :param a:
+    :param b:
+    :return:
+    """
     G, H = GHgauss(a)
     guess(G, H, b)
 
 
 def jacobi(a, b):
+    """
+    :param a:
+    :param b:
+    :return:
+    """
     G, H = GHjacobi(a)
     guess(G, H, b)
 
