@@ -54,10 +54,10 @@ def det(a):
 
 def minor(b, row, col):
     """
-    :param b: matrics
+    :param b: matrix
     :param row: row to remove
     :param col: column to remove
-    :return: matrics b without row and col
+    :return: matrix b without row and col
     """
     if row >= len(b) and col >= len(b):
         return b
