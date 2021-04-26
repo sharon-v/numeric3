@@ -242,13 +242,16 @@ def guess(G, H, b):
     prevX = makeMatrics(len(b), len(b[0]))
     currentX = makeMatrics(len(b), len(b[0]))
     flag = True
+    print("-----------------")
     while abs(currentX[0][0] - prevX[0][0]) > epsilon or flag is True:
         flag = False
         print(prevX)
         currentX = prevX
         prevX = plusMatrix(multMatrics(G, prevX), multMatrics(H, b))
         iteration += 1
-    print("Total iterations: " + str(iteration) + "\n")
+    print("-----------------")
+    print("Total number of iterations: " + str(iteration))
+    print("-----------------")
 
 
 def multScalar(a, s):
@@ -307,9 +310,9 @@ def gaussSeidel(a, b):
     :return: print the iteration of gauss seidel
     """
     G, H = GHgauss(a)
-    print("Gauss-Seidel = ")
+    print("\n*** Gauss-Seidel *** ")
     if checkConvergence(G) is False:
-        print("The system can't converge")
+        print("The system can't converge :(")
         return
     guess(G, H, b)
 
@@ -321,9 +324,9 @@ def jacobi(a, b):
     :return: print the iteration of jacobi
     """
     G, H = GHjacobi(a)
-    print("Jacobi = ")
+    print("\n*** Jacobi *** ")
     if checkConvergence(G) is False:
-        print("The system can't converge")
+        print("The system can't converge :(")
         return
     guess(G, H, b)
 
@@ -335,16 +338,23 @@ def driver():
     """
     a = [[4, 2, 0],
          [2, 10, 4],
-         [0, 4, 5]]
+         [0, 4, 3]]
 
     b = [[2],
          [6],
          [5]]
 
     if dominantDiagonal(a) is False:
-        print("Sufficient condition for convergence is not met")
-    jacobi(a, b)
-    gaussSeidel(a, b)
+        print("No dominant diagonal")
+    print("enter 0 for jacobi, 1 for gauss-seidel, other for both: ", end="")
+    temp = input()
+    if temp is '0':
+        jacobi(a, b)
+    elif temp is '1':
+        gaussSeidel(a, b)
+    else:
+        jacobi(a, b)
+        gaussSeidel(a, b)
 
 
 driver()
