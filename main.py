@@ -6,8 +6,8 @@
 # Gauss–Seidel
 # Jacobi
 
-
-def makeMatrics(row, col):
+# ########## LDU method ############
+def makeMatrics(row, col=1):
     """
     :param row: get rows of matrix
     :param col: get columns of matrix
@@ -245,6 +245,7 @@ def guess(G, H, b):
     print("-----------------")
     while abs(currentX[0][0] - prevX[0][0]) > epsilon or flag is True:
         flag = False
+        print("iter. " + str(iteration) + " =", end="\t")
         print(prevX)
         currentX = prevX
         prevX = plusMatrix(multMatrics(G, prevX), multMatrics(H, b))
@@ -331,9 +332,109 @@ def jacobi(a, b):
     guess(G, H, b)
 
 
+# ########### end LDU method #############
+
+##########################################
+
+# ########## iterative method ############
+def jacobiIter(a, b):
+    """
+    :param a: coefficient matrics
+    :param b: solution vector
+    :return: prints Jacobi method iterations
+    """
+    epsilon = 0.00001
+    iteration = 0
+    flag = True
+    prevX = makeMatrics(len(a))  # start as zero vector
+    currentX = makeMatrics(len(a))
+    matA, vectorB = isolateVariables(a, b)
+    print("\n*** iter Jacobi *** ")
+    print("-----------------")
+    while abs(currentX[0][0] - prevX[0][0]) > epsilon or flag is True:
+        flag = False
+        prevX = currentX
+        currentX = makeMatrics(len(currentX))
+        if iteration >= 100:
+            print("The system can't converge :(")
+            break
+        print("iter. " + str(iteration) + " =", end="\t")
+        print(prevX)
+        for i in range(len(a)):
+            j = 0
+            currentX[i][0] = vectorB[i][0]
+            while j < len(a[0]):
+                if j is not i:
+                    currentX[i][0] += matA[i][j] * prevX[j][0]
+                j += 1
+        iteration += 1
+    print("-----------------")
+    print("Total number of iterations: " + str(iteration))
+    print("-----------------")
+
+
+def gaussSeidelIter(a, b):
+    """
+    :param a: coefficient matrics
+    :param b: solution vector
+    :return: prints Gauss Seidel method iterations
+    """
+    epsilon = 0.00001
+    iteration = 0
+    flag = True
+    prevX = makeMatrics(len(a))  # start as zero vector
+    currentX = makeMatrics(len(a))
+    matA, vectorB = isolateVariables(a, b)
+    print("\n*** iter Gauss-Seidel *** ")
+    print("-----------------")
+    while abs(currentX[0][0] - prevX[0][0]) > epsilon or flag is True:
+        flag = False
+        prevX[0][0] = currentX[0][0]
+        if iteration >= 100:
+            print("The system can't converge :(")
+            break
+        print("iter. " + str(iteration) + " =", end="\t")
+        print(currentX)
+        for i in range(len(a)):
+            j = 0
+            currentX[i][0] = vectorB[i][0]
+            while j < len(a[0]):
+                if j is not i:
+                    currentX[i][0] += matA[i][j] * currentX[j][0]
+                j += 1
+        iteration += 1
+    print("-----------------")
+    print("Total number of iterations: " + str(iteration))
+    print("-----------------")
+
+
+def isolateVariables(a, b):
+    """
+    :param a: coefficient matrics
+    :param b: solution vector
+    :return: new matrics & vector after isolation of pivot in each row
+    """
+    vectorB = makeMatrics(len(a))
+    matA = makeMatrics(len(a), len(a[0]))
+    for i in range(len(a)):
+        vectorB[i][0] = b[i][0] / a[i][i]
+        j = 0
+        while j < len(a[0]):
+            if j is i:
+                matA[i][i] = 1
+            else:
+                matA[i][j] -= a[i][j] / a[i][i]
+            j += 1
+
+    return matA, vectorB
+
+
+# ########## end iterative method ############
+
+
 def driver():
     """
-    main function
+    main function for GH method
     :return: prints results
     """
     a = [[4, 2, 0],
@@ -357,4 +458,33 @@ def driver():
         gaussSeidel(a, b)
 
 
-driver()
+# driver()
+
+
+def newDrive():
+    """
+    main function for iterative isolation of variables method
+    :return: prints results
+    """
+    a = [[4, 2, 0],
+         [2, 10, 4],
+         [0, 4, 5]]
+
+    b = [[2],
+         [6],
+         [5]]
+
+    if dominantDiagonal(a) is False:
+        print("No dominant diagonal")
+    print("enter 0 for jacobi, 1 for gauss-seidel, other for both: ", end="")
+    temp = input()
+    if temp is '0':
+        jacobiIter(a, b)
+    elif temp is '1':
+        gaussSeidelIter(a, b)
+    else:
+        jacobiIter(a, b)
+        gaussSeidelIter(a, b)
+
+
+newDrive()
