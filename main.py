@@ -108,8 +108,9 @@ def swapRow(a, r1, r2):
     """
     c = makeMatrics(len(a), len(a[0]))
     c = unitMatrics(c)
-    c[r1] = a[r2]
-    c[r2] = a[r1]
+    temp = c[r1]
+    c[r1] = c[r2]
+    c[r2] = temp
     return c
 
 
@@ -458,7 +459,7 @@ def driver():
         gaussSeidel(a, b)
 
 
-# driver()
+driver()
 
 
 def newDrive():
