@@ -2,11 +2,13 @@
     team members: Hadar Amsalem, Sharon Vazana
     git link: https://github.com/sharon-v/numeric3.git"""
 
-
 # Gauss–Seidel
 # Jacobi
 
 # ########## LDU method ############
+from _json import make_encoder
+
+
 def makeMatrics(row, col=1):
     """
     :param row: get rows of matrix
@@ -426,11 +428,106 @@ def isolateVariables(a, b):
             else:
                 matA[i][j] -= a[i][j] / a[i][i]
             j += 1
-
     return matA, vectorB
 
 
-# ########## end iterative method ############
+# ######### end iterative method ##########
+###########################################
+# ########## dominant diagonal ############
+def copyMat(A):
+    """
+    :param A: a matrix
+    :return: a copy of the matrix
+    """
+    B = makeMatrics(len(A), len(A[0]))  # create a zero matrix of the same size as A
+    for i in range(len(A)):  # copy A
+        for j in range(len(A[0])):
+            B[i][j] = A[i][j]
+    return B
+
+
+def createDominantDiagonal(A, b=None):
+    """
+    :param A: a coefficients matrix
+    :param b: the column vector of constant terms.
+    :return: matrix A with dominant diagonal
+    """
+    max = 0  # the max value in the current row or column in the matrix
+    maxIndex = 0  # the index of the max value
+    for i in range((len(A))):  # calc the max value for each member on the main diagonal
+        sum = 0  # the sum of the members in the current row in A
+        for j in range(len(A)):  # go over the current row
+            sum += abs(A[i][j])  # add the value of each member in the row
+            if abs(A[i][j]) > max:  # search for the max value in the current row
+                max = abs(A[i][j])
+                maxIndex = j
+        if (sum - max) <= max:  # if the max value in the row meets the condition of a dominant diagonal
+            A = manualSwapCol(A, maxIndex, i)  # swap between the columns of the ...
+            # ... current value on the main diagonal and the max value in that row
+        else:  # look for the max value in the current column
+            max = 0
+            maxIndex = 0
+            for j in range(len(A)):  # go over the current column
+                # sum += abs(A[j][i])
+                if abs(A[j][i]) > max:  # search for the max value in the current column
+                    max = abs(A[j][i])
+                    maxIndex = j
+            if rowSum(A[j]) - max <= max:  # if the max value in the row meets the condition of a dominant diagonal
+                A, b = manualSwapRow(A, b, i, maxIndex)  # swap between the rows of the current value on...
+                # ...the main diagonal and the max value in that column
+            else:
+                print("ERROR - no dominant diagonal")  # A can't be changed into dominant diagonal matrix
+                return None, None
+    return A, b
+
+
+def manualSwapRow(a, b, r1, r2):
+    """
+    manaul rows exchange (without e)
+    :param a: The coefficient matrix
+    :param b:  The column vector of constant terms
+    :param r1: the first row to swap
+    :param r2: the second row to swap
+    :return: the matrix after the swap, The column vector of constant terms after swap
+    """
+    if r2 < len(a) and r1 < len(a):
+        temp = a[r1]
+        a[r1] = a[r2]
+        a[r2] = temp
+        if b is not None:  # if the result vector is not none swap him too
+            temp = b[r1]
+            b[r1] = b[r2]
+            b[r2] = temp
+    return a, b
+
+
+def manualSwapCol(a, c1, c2):
+    """
+    :param a: The coefficient matrix
+    :param c1: the first column to swap
+    :param c2: the second column to swap
+    :return: the matrix after the swap
+    """
+    if c2 < len(a) and c1 < len(a):
+        for i in range(len(a)):
+            temp = a[i][c1]
+            a[i][c1] = a[i][c2]
+            a[i][c2] = temp
+    return a
+
+
+def rowSum(line):
+    """
+    :param line: A list od numbers - line for the matrix
+    :return: the sum of all the numbers in abs  in the list
+    """
+    lineSum = 0
+    for index in range(len(line)):  # run over all the line`s members
+        lineSum += abs(line[index])
+    return lineSum
+
+
+# dominant diagonal end
 
 
 def driver():
@@ -447,7 +544,15 @@ def driver():
          [5]]
 
     if dominantDiagonal(a) is False:
-        print("No dominant diagonal")
+        # check
+        copyA = copyMat(a)
+        copyB = copyMat(b)
+        copyA, copyB = createDominantDiagonal(copyA, copyB)
+        if (copyA is not None) and (copyB is not None):
+            a = copyA
+            b = copyB
+        else:
+            print("No dominant diagonal")
     print("enter 0 for jacobi, 1 for gauss-seidel, other for both: ", end="")
     temp = input()
     if temp is '0':
@@ -468,7 +573,7 @@ def newDrive():
     :return: prints results
     """
     a = [[4, 2, 0],
-         [2, 10, 4],
+         [2, 4, 10],
          [0, 4, 5]]
 
     b = [[2],
@@ -476,7 +581,15 @@ def newDrive():
          [5]]
 
     if dominantDiagonal(a) is False:
-        print("No dominant diagonal")
+        # check
+        copyA = copyMat(a)
+        copyB = copyMat(b)
+        copyA, copyB = createDominantDiagonal(copyA, copyB)
+        if (copyA is not None) and (copyB is not None):
+            a = copyA
+            b = copyB
+        else:
+            print("No dominant diagonal")
     print("enter 0 for jacobi, 1 for gauss-seidel, other for both: ", end="")
     temp = input()
     if temp is '0':
